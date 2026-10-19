@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#09090b">
+<title>Админка | danyamm2shop</title>
+<style>
+:root{--bg:#09090b;--card:#18181b;--text:#f4f4f5;--muted:#9ca3af;--accent:#a78bfa;--ok:#34d399;--bad:#f87171;--border:rgba(255,255,255,.09)}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--text);font:16px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;padding:16px 16px calc(150px + env(safe-area-inset-bottom));max-width:620px;margin:0 auto}
+h1{font-size:22px;margin:8px 0 4px}
+p.sub{color:var(--muted);font-size:14px;margin-bottom:16px}
+.box{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px;margin-bottom:12px}
+label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+input[type=password],input[type=text],input[type=datetime-local],input[type=search]{width:100%;padding:12px;border-radius:12px;border:1px solid var(--border);background:#0f0f12;color:var(--text);font:inherit}
+button{font:inherit;color:inherit;border:0;cursor:pointer}
+.primary{background:var(--accent);color:#1b1033;font-weight:700;padding:13px 18px;border-radius:14px;width:100%;margin-top:10px}
+.primary:disabled{opacity:.4}
+.ghost{background:none;color:var(--muted);font-size:13px;padding:6px}
+.help{font-size:13px;color:var(--muted);margin-top:12px;line-height:1.6}
+.help b{color:var(--text)}
+.top{display:flex;justify-content:space-between;align-items:center}
+[hidden]{display:none!important}
+.prow{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.prow b{font-size:16px}.prow small{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+.tsw{flex:none;width:58px;height:34px;border-radius:99px;background:#3f3f46;padding:3px;display:flex;align-items:center;transition:background .25s}
+.tsw i{width:28px;height:28px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.35);transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
+.tsw[aria-checked=true]{background:var(--ok)}
+.tsw[aria-checked=true] i{transform:translateX(24px)}
+.box.ch2{border-color:rgba(167,139,250,.5)}
+.ok{color:var(--ok)}.err{color:var(--bad)}
+#msg{font-size:14px;min-height:20px;margin-bottom:6px;text-align:center}
+
+/* лоты */
+.grp{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:18px 2px 8px}
+.lot{padding:12px 0;border-bottom:1px solid var(--border)}
+.lot:last-child{border:0}
+.lot.ch{background:rgba(167,139,250,.10);margin:0 -10px;padding:12px 10px;border-radius:14px}
+.lot .nm{font-weight:700;font-size:15px;margin-bottom:8px}
+.lot .f{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.f small{display:block;font-size:11px;color:var(--muted);margin-bottom:4px;font-weight:600}
+.qty{display:flex;align-items:center;gap:4px}
+.qty button{width:36px;height:42px;border-radius:11px;background:#27272a;font-size:20px;font-weight:700}
+.qty input{width:46px}
+.f input[type=number]{width:100%;height:42px;padding:0 10px;text-align:center;border-radius:11px;border:1px solid var(--border);background:#0f0f12;color:var(--text);font:700 16px -apple-system,sans-serif}
+.f input.mod{border-color:var(--accent)}
+.f input::placeholder{color:#6b7280;font-weight:500}
+.tgrow{display:flex;gap:10px;align-items:center}
+.tgrow input{width:90px;height:42px;text-align:center;border-radius:11px;border:1px solid var(--border);background:#0f0f12;color:var(--text);font:700 16px -apple-system,sans-serif}
+.bar{position:fixed;left:0;right:0;bottom:0;background:rgba(9,9,11,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--border);padding:12px 16px calc(12px + env(safe-area-inset-bottom))}
+.bar>div{max-width:620px;margin:0 auto}
+</style>
+</head>
+<body>
+<div class="top"><h1>Управление магазином</h1><button class="ghost" id="logout" hidden>Выйти</button></div>
+<p class="sub">Наличие, цены FunPay и Telegram для всех лотов. Нажми «Сохранить», сайт обновится примерно за минуту.</p>
+
+<div class="box" id="login">
+  <label for="tok">Токен GitHub (вводится один раз, хранится только в этом браузере)</label>
+  <input type="password" id="tok" placeholder="github_pat_..." autocomplete="off">
+  <button class="primary" id="enter">Войти</button>
+  <div class="help">
+    <b>Как получить токен:</b><br>
+    1. Открой github.com → фото профиля → <b>Settings</b> → внизу <b>Developer settings</b>.<br>
+    2. <b>Personal access tokens</b> → <b>Fine-grained tokens</b> → <b>Generate new token</b>.<br>
+    3. Название любое. Срок (Expiration) выбери самый длинный.<br>
+    4. <b>Repository access</b> → <b>Only select repositories</b> → выбери <b>danyamm2-shop</b>.<br>
+    5. <b>Permissions</b> → <b>Repository permissions</b> → <b>Contents</b> → <b>Read and write</b>.<br>
+    6. Нажми <b>Generate token</b>, скопируй и вставь сюда. Никому его не показывай.
+  </div>
+</div>
+
+<div id="app" hidden>
+  <div class="box" id="promoBox">
+    <div class="prow"><div><b>🎁 Реклама розыгрыша</b><small id="promoState">Баннер на сайте включён</small></div>
+      <button class="tsw" id="promoOn" type="button" role="switch" aria-checked="true" aria-label="Показывать баннер розыгрыша"><i></i></button></div>
+    <label for="promoNote" style="margin-top:14px">Текст под заголовком (например, дата итогов)</label>
+    <input type="text" id="promoNote" maxlength="80" placeholder="Итоги 25 октября, 20:00 МСК">
+    <label for="promoEnd" style="margin-top:14px">Дата и время итогов по МСК (по ней идёт таймер на сайте)</label>
+    <input type="datetime-local" id="promoEnd">
+    <label for="promoWin" style="margin-top:14px">Победитель (после итогов; пусто = не показывать)</label>
+    <input type="text" id="promoWin" maxlength="40" placeholder="@username">
+  </div>
+
+  <div class="box" id="tgBox">
+    <div class="prow"><div><b>✈️ Скидка в Telegram</b><small>Общий процент, если у лота не указана своя цена ТГ</small></div>
+      <div class="tgrow"><input type="number" id="tgPct" inputmode="decimal" min="0" max="80" step="1"><span style="color:var(--muted)">%</span></div></div>
+  </div>
+
+  <div class="box">
+    <input type="search" id="find" placeholder="Поиск лота…" autocomplete="off">
+    <div class="help" style="margin-top:8px">Количество · цена FunPay (₽) · цена Telegram (₽). Пустая цена ТГ = считается автоматически по скидке.</div>
+    <div id="list"></div>
+  </div>
+</div>
+
+<div class="bar" id="bar" hidden><div>
+  <div id="msg"></div>
+  <div style="display:flex;justify-content:space-between;color:var(--muted);font-size:13px"><span>Всего: <b id="sum" style="color:var(--text)">0</b> шт.</span><span id="chg"></span></div>
+  <button class="primary" id="save" disabled>Сохранить</button>
+</div></div>
+
+<script>
+(function(){
+'use strict';
+var OWNER='danyamm2-store',REPO='danyamm2-shop',PATH='stock.json';
+var ITEMS=[{"id": "79451523", "name": "⚔️ Eternal IV", "g": "Murder Mystery 2", "price": 55.55, "stock": 2}, {"id": "79451431", "name": "⚔️ Eternal III", "g": "Murder Mystery 2", "price": 55.55, "stock": 3}, {"id": "79451271", "name": "⚔️ Eternal II", "g": "Murder Mystery 2", "price": 55.55, "stock": 4}, {"id": "79314959", "name": "⚔️ Eternalcane", "g": "Murder Mystery 2", "price": 58.0, "stock": 2}, {"id": "79017685", "name": "🌈 Chroma Heat", "g": "Murder Mystery 2", "price": 110.0, "stock": 1}, {"id": "79016484", "name": "☠️ Chroma Boneblade", "g": "Murder Mystery 2", "price": 90.0, "stock": 1}, {"id": "79008247", "name": "🦈 Chroma Shark", "g": "Murder Mystery 2", "price": 185.0, "stock": 1}, {"id": "78956017", "name": "🌴 Нож Palms", "g": "Murder Mystery 2", "price": 10.01, "stock": 1}, {"id": "78729701", "name": "🔫 Пистолет Palms", "g": "Murder Mystery 2", "price": 14.0, "stock": 1}, {"id": "78729612", "name": "🔮 Witched", "g": "Murder Mystery 2", "price": 50.0, "stock": 1}, {"id": "78729197", "name": "🟢 Green Fire", "g": "Murder Mystery 2", "price": 33.34, "stock": 1}, {"id": "78727811", "name": "❄️ Icecracker", "g": "Murder Mystery 2", "price": 44.0, "stock": 5}, {"id": "78728701", "name": "🌸 Blossom", "g": "Murder Mystery 2", "price": 44.99, "stock": 3}, {"id": "78728054", "name": "🎃 Jack 2015", "g": "Murder Mystery 2", "price": 55.55, "stock": 3}, {"id": "78727856", "name": "💀 Skully", "g": "Murder Mystery 2", "price": 55.55, "stock": 1}, {"id": "78722305", "name": "🥶 Icebeam", "g": "Murder Mystery 2", "price": 117.0, "stock": 2}, {"id": "78701049", "name": "👑 Luger", "g": "Murder Mystery 2", "price": 117.0, "stock": 2}, {"id": "78139757", "name": "🧊 Icewing", "g": "Murder Mystery 2", "price": 80.0, "stock": 5}, {"id": "o93648d", "name": "🐉 Легендарный дракон + 5 топ петов — Grow a Garden", "g": "Roblox", "price": 55.54, "stock": 1}, {"id": "ob779aa", "name": "☢️ 6 радиоактивных богов — Steal a Brainrot", "g": "Roblox", "price": 20.0, "stock": 1}, {"id": "o8dc46f", "name": "🔪 Керамбит PUBG Mobile (отправляю подарком)", "g": "PUBG Mobile", "price": 2200.0, "stock": 1}, {"id": "oc2d408", "name": "💔 LOVESTRUCK Chestplate", "g": "Rust", "price": 115.0, "stock": 1}, {"id": "o1aff25", "name": "🔮 LOVESTRUCK Metal Facemask", "g": "Rust", "price": 132.33, "stock": 1}, {"id": "o338381", "name": "🖤 LOVESTRUCK Hoodie", "g": "Rust", "price": 155.35, "stock": 1}, {"id": "o76d762", "name": "❤️ LOVESTRUCK Tactical Gloves", "g": "Rust", "price": 97.81, "stock": 1}, {"id": "odea6ee", "name": "🎁 51 раунд Twitch Drops для Rust", "g": "Twitch Drops Rust", "price": 5.0, "stock": 1}, {"id": "odd076d", "name": "🎁 52 раунд Twitch Drops для Rust", "g": "Twitch Drops Rust", "price": 5.0, "stock": 1}];
+var $=function(s){return document.querySelector(s)};
+var DEF_NOTE='Итоги 25 октября, 20:00 МСК',DEF_END='2026-10-25T20:00',DEF_PCT=9;
+var token='',sha=null,data={},orig={},cur={},opct=DEF_PCT,cpct=DEF_PCT;
+var po={on:true,note:DEF_NOTE,end:DEF_END,win:''},pc={on:true,note:DEF_NOTE,end:DEF_END,win:''};
+try{token=localStorage.getItem('gh_token')||''}catch(e){}
+var url='https://api.github.com/repos/'+OWNER+'/'+REPO+'/contents/'+PATH;
+function api(method,body){
+  return fetch(url,{method:method,headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json'},body:body?JSON.stringify(body):undefined,cache:'no-store'});
+}
+function msg(t,c){var m=$('#msg');m.textContent=t||'';m.className=c||''}
+function fail(e){alert(e.message==='Failed to fetch'?'Нет связи с GitHub. Проверь интернет или включи VPN.':e.message)}
+function show(logged){$('#login').hidden=logged;$('#app').hidden=!logged;$('#bar').hidden=!logged;$('#logout').hidden=!logged}
+function r2(x){return Math.round(x*100)/100}
+function auto(it){return r2(cur[it.id].fp*(1-cpct/100))}
+function same(a,b){return a.n===b.n&&a.fp===b.fp&&a.tg===b.tg}
+
+function render(){
+  var box=$('#list');box.textContent='';var g='';
+  ITEMS.forEach(function(it){
+    if(it.g!==g){g=it.g;var h=document.createElement('div');h.className='grp';h.dataset.g=g;h.textContent=g;box.appendChild(h)}
+    var r=document.createElement('div');r.className='lot';r.dataset.id=it.id;r.dataset.n=it.name.toLowerCase();r.dataset.g=it.g;
+    r.innerHTML='<div class="nm"></div><div class="f"><div><small>Кол-во</small><div class="qty"><button type="button" data-d="-1" aria-label="Минус">−</button><input type="number" class="q" inputmode="numeric" min="0" max="999"><button type="button" data-d="1" aria-label="Плюс">+</button></div></div><div><small>FunPay ₽</small><input type="number" class="fp" inputmode="decimal" min="0" step="0.01"></div><div><small>Telegram ₽</small><input type="number" class="tg" inputmode="decimal" min="0" step="0.01"></div></div>';
+    r.querySelector('.nm').textContent=it.name;
+    box.appendChild(r);
+  });
+  refresh();filterList();
+}
+function refresh(){
+  var sum=0,n=0;
+  ITEMS.forEach(function(it){
+    var c=cur[it.id];sum+=c.n;var ch=!same(c,orig[it.id]);if(ch)n++;
+    var r=document.querySelector('.lot[data-id="'+it.id+'"]');
+    if(!r)return;
+    r.classList.toggle('ch',ch);
+    var q=r.querySelector('.q'),fp=r.querySelector('.fp'),tg=r.querySelector('.tg'),a=document.activeElement;
+    if(a!==q)q.value=c.n;
+    if(a!==fp)fp.value=c.fp;
+    if(a!==tg)tg.value=c.tg==null?'':c.tg;
+    tg.placeholder=auto(it)+' (авто)';
+    fp.classList.toggle('mod',c.fp!==it.price);tg.classList.toggle('mod',c.tg!=null);
+  });
+  var pch=(pc.on!==po.on)||(pc.note!==po.note)||(pc.end!==po.end)||(pc.win!==po.win);if(pch)n++;
+  if(cpct!==opct)n++;
+  $('#promoBox').classList.toggle('ch2',pch);$('#tgBox').classList.toggle('ch2',cpct!==opct);
+  $('#promoOn').setAttribute('aria-checked',pc.on);
+  $('#promoState').textContent=pc.on?'Баннер на сайте включён':'Баннер на сайте выключен';
+  var pn=$('#promoNote');if(document.activeElement!==pn)pn.value=pc.note;
+  var pe=$('#promoEnd');if(document.activeElement!==pe)pe.value=pc.end;
+  var pw=$('#promoWin');if(document.activeElement!==pw)pw.value=pc.win;
+  var tp=$('#tgPct');if(document.activeElement!==tp)tp.value=cpct;
+  $('#sum').textContent=sum;$('#chg').textContent=n?('Изменено: '+n):'';
+  $('#save').disabled=!n;
+}
+function filterList(){
+  var q=$('#find').value.trim().toLowerCase(),seen={};
+  [].forEach.call(document.querySelectorAll('.lot'),function(r){var ok=!q||r.dataset.n.indexOf(q)>-1;r.hidden=!ok;if(ok)seen[r.dataset.g]=1});
+  [].forEach.call(document.querySelectorAll('.grp'),function(h){h.hidden=!seen[h.dataset.g]});
+}
+$('#find').addEventListener('input',filterList);
+$('#promoOn').addEventListener('click',function(){pc.on=!pc.on;refresh();msg('')});
+$('#promoNote').addEventListener('input',function(){pc.note=this.value;refresh();msg('')});
+$('#promoEnd').addEventListener('input',function(){pc.end=this.value||DEF_END;refresh();msg('')});
+$('#promoWin').addEventListener('input',function(){pc.win=this.value.trim();refresh();msg('')});
+$('#tgPct').addEventListener('input',function(){var v=parseFloat(this.value);cpct=(isNaN(v)||v<0)?0:Math.min(v,80);refresh();msg('')});
+$('#tgPct').addEventListener('focusout',function(){this.value=cpct});
+
+function lotOf(el){return el.closest('.lot').dataset.id}
+function itOf(id){return ITEMS.filter(function(i){return i.id===id})[0]}
+$('#list').addEventListener('click',function(e){
+  var b=e.target.closest('button[data-d]');if(!b)return;
+  var id=lotOf(b),c=cur[id];c.n=Math.max(0,Math.min(999,c.n+(+b.dataset.d)));refresh();msg('');
+});
+$('#list').addEventListener('input',function(e){
+  var i=e.target.closest('input');if(!i)return;
+  var id=lotOf(i),c=cur[id],v=parseFloat(i.value);
+  if(i.classList.contains('q')){v=parseInt(i.value,10);c.n=(isNaN(v)||v<0)?0:Math.min(v,999)}
+  else if(i.classList.contains('fp')){if(!isNaN(v)&&v>=0)c.fp=r2(v)}
+  else if(i.classList.contains('tg')){c.tg=(isNaN(v)||v<=0)?null:r2(v)}
+  refresh();msg('');
+});
+$('#list').addEventListener('focusout',function(e){
+  var i=e.target.closest('input');if(!i)return;var c=cur[lotOf(i)];
+  if(i.classList.contains('q'))i.value=c.n;else if(i.classList.contains('fp'))i.value=c.fp;else i.value=c.tg==null?'':c.tg;
+});
+
+function load(){
+  msg('Загружаю…');
+  return api('GET').then(function(r){
+    if(r.status===401||r.status===403)throw new Error('Токен не подходит. Проверь права (Contents: Read and write) и что выбран репозиторий danyamm2-shop.');
+    if(r.status===404)throw new Error('Файл stock.json не найден в репозитории. Загрузи его в корень, рядом с index.html.');
+    if(!r.ok)throw new Error('Ошибка GitHub: '+r.status);
+    return r.json();
+  }).then(function(j){
+    sha=j.sha;
+    data=JSON.parse(decodeURIComponent(escape(atob(j.content.replace(/\s/g,'')))));
+    var st=data.stock||{},pr=data.prices||{};orig={};cur={};
+    ITEMS.forEach(function(it){
+      var n=typeof st[it.id]==='number'?st[it.id]:it.stock,o=pr[it.id]||{};
+      var fp=+o.fp>0?r2(+o.fp):it.price,tg=+o.tg>0?r2(+o.tg):null;
+      orig[it.id]={n:n,fp:fp,tg:tg};cur[it.id]={n:n,fp:fp,tg:tg};
+    });
+    var g=parseFloat(data.tgPct);opct=cpct=(g>=0&&g<90)?g:DEF_PCT;
+    var p=data.promo||{};
+    po={on:p.on!==false,note:(typeof p.note==='string'&&p.note.trim())?p.note:DEF_NOTE,end:(typeof p.end==='string'&&/^\d{4}-\d\d-\d\dT\d\d:\d\d/.test(p.end))?p.end.slice(0,16):DEF_END,win:typeof p.winner==='string'?p.winner:''};
+    pc={on:po.on,note:po.note,end:po.end,win:po.win};
+    render();show(true);msg('');
+  });
+}
+if(token){load().catch(function(e){show(false);msg('');fail(e)})}
+$('#enter').addEventListener('click',function(){
+  var t=$('#tok').value.trim();if(!t)return;
+  token=t;
+  load().then(function(){try{localStorage.setItem('gh_token',token)}catch(e){}$('#tok').value=''}).catch(function(e){token='';show(false);msg('');fail(e)});
+});
+$('#logout').addEventListener('click',function(){try{localStorage.removeItem('gh_token')}catch(e){}token='';show(false)});
+
+$('#save').addEventListener('click',function(){
+  var st={},pr={};
+  ITEMS.forEach(function(it){
+    var c=cur[it.id];st[it.id]=c.n;
+    if(c.fp!==it.price||c.tg!=null){var o={fp:c.fp};if(c.tg!=null)o.tg=c.tg;pr[it.id]=o}
+  });
+  var d=new Date(),p=function(n){return String(n).padStart(2,'0')};
+  var stamp=d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes());
+  pc.note=pc.note.trim()||DEF_NOTE;
+  var promo=Object.assign({},data.promo||{},{on:pc.on,note:pc.note,end:pc.end+':00+03:00'});
+  if(pc.win)promo.winner=pc.win;else delete promo.winner;
+  var out=Object.assign({},data,{updated:stamp,stock:st,prices:pr,tgPct:cpct,promo:promo});
+  var json=JSON.stringify(out,null,1);
+  $('#save').disabled=true;msg('Сохраняю…');
+  api('PUT',{message:'Обновление магазина '+stamp,content:btoa(unescape(encodeURIComponent(json))),sha:sha}).then(function(r){
+    if(r.status===409||r.status===422)throw new Error('Данные на GitHub изменились. Страница обновится, повтори изменения.');
+    if(!r.ok)throw new Error('Ошибка сохранения: '+r.status);
+    return r.json();
+  }).then(function(j){
+    sha=j.content.sha;data=out;
+    ITEMS.forEach(function(it){var c=cur[it.id];orig[it.id]={n:c.n,fp:c.fp,tg:c.tg}});
+    po={on:pc.on,note:pc.note,end:pc.end,win:pc.win};opct=cpct;refresh();
+    msg('Сохранено ✓ Сайт обновится в течение минуты','ok');
+  }).catch(function(e){
+    msg(e.message==='Failed to fetch'?'Нет связи с GitHub':e.message,'err');
+    if(/изменились/.test(e.message))load();else $('#save').disabled=false;
+  });
+});
+})();
+</script>
+</body>
+</html>
