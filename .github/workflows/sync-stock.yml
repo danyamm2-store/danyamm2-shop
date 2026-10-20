@@ -1,0 +1,23 @@
+name: Sync stock from FunPay
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch: {}
+permissions:
+  contents: write
+concurrency: sync-stock
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: python sync_stock.py
+      - name: Commit if changed
+        run: |
+          if ! git diff --quiet stock.json; then
+            git config user.name "stock-bot"; git config user.email "bot@users.noreply.github.com"
+            git add stock.json; git commit -m "stock: sync from FunPay"
+            git pull --rebase; git push
+          fi
