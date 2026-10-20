@@ -33,6 +33,7 @@ def main():
     tracked = {k: o for k, o in tracked.items() if o}
     found = [k for k, o in tracked.items() if o in offers]
     print("Лотов на странице: %d. Лотов с сайта найдено на FunPay: %d из %d" % (len(offers), len(found), len(tracked)))
+    print("ID на странице:", sorted(offers))
     # ЗАЩИТА: если большая часть лотов «пропала», это сбой страницы, а не продажи. Ничего не меняем.
     if len(found) < 0.5 * len(tracked):
         print("СТОП: на странице нет большей части твоих лотов (FunPay отдал урезанную страницу?). stock.json не изменён.")
