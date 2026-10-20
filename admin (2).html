@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#09090b">
+<title>Наличие и цены | danyamm2shop</title>
+<style>
+:root{--bg:#09090b;--card:#18181b;--text:#f4f4f5;--muted:#9ca3af;--accent:#a78bfa;--ok:#34d399;--bad:#f87171;--border:rgba(255,255,255,.09)}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--text);font:16px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;padding:16px 16px calc(150px + env(safe-area-inset-bottom));max-width:560px;margin:0 auto}
+h1{font-size:22px;margin:8px 0 4px}
+p.sub{color:var(--muted);font-size:14px;margin-bottom:16px}
+.box{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px;margin-bottom:12px}
+label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+input[type=password],input[type=text],input[type=datetime-local],input[type=search]{width:100%;padding:12px;border-radius:12px;border:1px solid var(--border);background:#0f0f12;color:var(--text);font:inherit}
+button{font:inherit;color:inherit;border:0;cursor:pointer}
+.primary{background:var(--accent);color:#1b1033;font-weight:700;padding:13px 18px;border-radius:14px;width:100%;margin-top:10px}
+.primary:disabled{opacity:.4}
+.ghost{background:none;color:var(--muted);font-size:13px;padding:6px}
+.help{font-size:13px;color:var(--muted);margin-top:12px;line-height:1.6}
+.help b{color:var(--text)}
+.grp{font-size:13px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--accent);margin:16px 2px 6px}
+.row{padding:12px 0;border-bottom:1px solid var(--border)}
+.row:last-child{border:0}
+.row.ch{background:rgba(167,139,250,.10);margin:0 -8px;padding:12px 8px;border-radius:12px}
+.nm{font-weight:600;font-size:15px;margin-bottom:8px}
+.ctl{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap}
+.qty{display:flex;align-items:center;gap:6px}
+.qty button{width:40px;height:40px;border-radius:12px;background:#27272a;font-size:22px;font-weight:700}
+.qty input{width:52px;height:40px;text-align:center;border-radius:12px;border:1px solid var(--border);background:#0f0f12;color:var(--text);font:700 17px -apple-system,sans-serif}
+.pf{flex:1;min-width:110px}
+.pf span{display:block;font-size:11px;color:var(--muted);margin-bottom:3px;font-weight:700}
+.pf input{width:100%;height:40px;padding:0 10px;border-radius:12px;border:1px solid var(--border);background:#0f0f12;color:var(--text);font:700 16px -apple-system,sans-serif}
+.pf small{display:block;font-size:11px;color:var(--muted);margin-top:3px;min-height:14px}
+.pf small.up{color:var(--ok)}
+.bar{position:fixed;left:0;right:0;bottom:0;background:rgba(9,9,11,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--border);padding:12px 16px calc(12px + env(safe-area-inset-bottom))}
+.bar>div{max-width:560px;margin:0 auto}
+#msg{font-size:14px;min-height:20px;margin-bottom:6px;text-align:center}
+.ok{color:var(--ok)}.err{color:var(--bad)}
+.top{display:flex;justify-content:space-between;align-items:center}
+[hidden]{display:none!important}
+.prow{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.prow b{font-size:16px}.prow small{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+.tsw{flex:none;width:58px;height:34px;border-radius:99px;background:#3f3f46;padding:3px;display:flex;align-items:center;transition:background .25s}
+.tsw i{width:28px;height:28px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.35);transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
+.tsw[aria-checked=true]{background:var(--ok)}
+.tsw[aria-checked=true] i{transform:translateX(24px)}
+.box.ch2{border-color:rgba(167,139,250,.5)}
+.mini{background:#27272a;border-radius:10px;padding:8px 12px;font-size:13px;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="top"><h1>Наличие и цены</h1><button class="ghost" id="logout" hidden>Выйти</button></div>
+<p class="sub">Измени числа и нажми «Сохранить». Сайт обновится примерно за минуту.</p>
+
+<div class="box" id="login">
+  <label for="tok">Токен GitHub (вводится один раз, хранится только в этом браузере)</label>
+  <input type="password" id="tok" placeholder="github_pat_..." autocomplete="off">
+  <button class="primary" id="enter">Войти</button>
+  <div class="help">
+    <b>Как получить токен:</b><br>
+    1. Открой github.com → фото профиля → <b>Settings</b> → внизу <b>Developer settings</b>.<br>
+    2. <b>Personal access tokens</b> → <b>Fine-grained tokens</b> → <b>Generate new token</b>.<br>
+    3. Название любое. Срок (Expiration) выбери самый длинный.<br>
+    4. <b>Repository access</b> → <b>Only select repositories</b> → выбери <b>danyamm2-shop</b>.<br>
+    5. <b>Permissions</b> → <b>Repository permissions</b> → <b>Contents</b> → <b>Read and write</b>.<br>
+    6. Нажми <b>Generate token</b>, скопируй и вставь сюда. Никому его не показывай.
+  </div>
+</div>
+
+<div id="app" hidden>
+  <div class="box" id="promoBox">
+    <div class="prow"><div><b>🎁 Реклама розыгрыша</b><small id="promoState">Баннер на сайте включён</small></div>
+      <button class="tsw" id="promoOn" type="button" role="switch" aria-checked="true" aria-label="Показывать баннер розыгрыша"><i></i></button></div>
+    <label for="promoNote" style="margin-top:14px">Текст под заголовком (например, дата итогов)</label>
+    <input type="text" id="promoNote" maxlength="80" placeholder="Итоги 25 октября, 20:00 МСК">
+    <label for="promoEnd" style="margin-top:14px">Дата и время итогов по МСК (по ней идёт таймер на сайте)</label>
+    <input type="datetime-local" id="promoEnd">
+  </div>
+  <div class="box">
+    <label for="find">Поиск лота</label>
+    <input type="search" id="find" placeholder="Например: Lovestruck, Eternal, Palms">
+    <div class="mini">Цена в ТГ пустая = авто (−9% от FunPay). Впиши число, чтобы задать свою.
+      <button class="ghost" id="allAuto" type="button" style="display:block;margin-top:4px;padding:4px 0;color:var(--accent)">Сбросить все цены ТГ на авто</button></div>
+  </div>
+  <div class="box" id="list"></div>
+</div>
+
+<div class="bar" id="bar" hidden><div>
+  <div id="msg"></div>
+  <div style="display:flex;justify-content:space-between;color:var(--muted);font-size:13px"><span>Всего MM2: <b id="sum" style="color:var(--text)">0</b> шт.</span><span id="chg"></span></div>
+  <button class="primary" id="save" disabled>Сохранить</button>
+</div></div>
+
+<script>
+(function(){
+'use strict';
+var OWNER='danyamm2-store',REPO='danyamm2-shop';
+var ITEMS=[{"id": "79451523", "name": "🛡️ Eternal IV", "g": "Murder Mystery 2", "fp": 55.55, "mm2": 1, "stock": 2}, {"id": "79451431", "name": "🟢 Eternal III", "g": "Murder Mystery 2", "fp": 55.55, "mm2": 1, "stock": 3}, {"id": "79451271", "name": "🔴 Eternal II", "g": "Murder Mystery 2", "fp": 55.55, "mm2": 1, "stock": 4}, {"id": "79314959", "name": "❄️ Eternalcane", "g": "Murder Mystery 2", "fp": 58.0, "mm2": 1, "stock": 2}, {"id": "79017685", "name": "🌈 Chroma Heat", "g": "Murder Mystery 2", "fp": 110.0, "mm2": 1, "stock": 1}, {"id": "79016484", "name": "☠️ Chroma Boneblade", "g": "Murder Mystery 2", "fp": 90.0, "mm2": 1, "stock": 1}, {"id": "79008247", "name": "🦈 Chroma Shark", "g": "Murder Mystery 2", "fp": 185.0, "mm2": 1, "stock": 1}, {"id": "78956017", "name": "🌴 Нож Palms", "g": "Murder Mystery 2", "fp": 10.01, "mm2": 1, "stock": 1}, {"id": "78729701", "name": "🔫 Пист. Palms", "g": "Murder Mystery 2", "fp": 14.0, "mm2": 1, "stock": 1}, {"id": "78729612", "name": "🔮 Witched", "g": "Murder Mystery 2", "fp": 50.0, "mm2": 1, "stock": 1}, {"id": "78729197", "name": "🟢 Green Fire", "g": "Murder Mystery 2", "fp": 33.34, "mm2": 1, "stock": 1}, {"id": "78727811", "name": "❄️ Icecracker", "g": "Murder Mystery 2", "fp": 44.0, "mm2": 1, "stock": 5}, {"id": "78728701", "name": "🌸 Blossom", "g": "Murder Mystery 2", "fp": 44.99, "mm2": 1, "stock": 3}, {"id": "78728054", "name": "🎃 Jack 2015", "g": "Murder Mystery 2", "fp": 55.55, "mm2": 1, "stock": 3}, {"id": "78727856", "name": "💀 Skully", "g": "Murder Mystery 2", "fp": 55.55, "mm2": 1, "stock": 1}, {"id": "78722305", "name": "🥶 Icebeam", "g": "Murder Mystery 2", "fp": 117.0, "mm2": 1, "stock": 2}, {"id": "78701049", "name": "👑 Luger", "g": "Murder Mystery 2", "fp": 117.0, "mm2": 1, "stock": 2}, {"id": "78139757", "name": "🧊 Icewing", "g": "Murder Mystery 2", "fp": 80.0, "mm2": 1, "stock": 5}, {"id": "o93648d", "name": "🐉 Легендарный дракон + 5 топ петов — Grow a Garden", "g": "Roblox", "fp": 55.54, "mm2": 0}, {"id": "ob779aa", "name": "☢️ 6 радиоактивных богов — Steal a Brainrot", "g": "Roblox", "fp": 20.0, "mm2": 0}, {"id": "o8dc46f", "name": "🔪 Керамбит PUBG Mobile (отправляю подарком)", "g": "PUBG Mobile", "fp": 2200.0, "mm2": 0}, {"id": "oc2d408", "name": "💔 LOVESTRUCK Chestplate", "g": "Rust (LOVESTRUCK)", "fp": 115.0, "mm2": 0}, {"id": "o1aff25", "name": "🔮 LOVESTRUCK Metal Facemask", "g": "Rust (LOVESTRUCK)", "fp": 132.33, "mm2": 0}, {"id": "o338381", "name": "🖤 LOVESTRUCK Hoodie", "g": "Rust (LOVESTRUCK)", "fp": 155.35, "mm2": 0}, {"id": "o76d762", "name": "❤️ LOVESTRUCK Tactical Gloves", "g": "Rust (LOVESTRUCK)", "fp": 97.81, "mm2": 0}, {"id": "odea6ee", "name": "🎁 51 раунд Twitch Drops для Rust", "g": "Twitch Drops Rust", "fp": 5.0, "mm2": 0}, {"id": "odd076d", "name": "🎁 52 раунд Twitch Drops для Rust", "g": "Twitch Drops Rust", "fp": 5.0, "mm2": 0}];
+var $=function(s){return document.querySelector(s)};
+var DEF_NOTE='Итоги 25 октября, 20:00 МСК',DEF_END='2026-10-25T20:00',K=50/55;
+var token='',files={stock:{path:'stock.json',sha:null,data:{}},prices:{path:'prices.json',sha:null,data:{}}};
+var orig={},cur={},po={},pc={};
+try{token=localStorage.getItem('gh_token')||''}catch(e){}
+function url(p){return 'https://api.github.com/repos/'+OWNER+'/'+REPO+'/contents/'+p}
+function api(p,method,body){return fetch(url(p),{method:method,headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json'},body:body?JSON.stringify(body):undefined,cache:'no-store'})}
+function msg(t,c){var m=$('#msg');m.textContent=t||'';m.className=c||''}
+function fail(e){alert(e.message==='Failed to fetch'?'Нет связи с GitHub. Проверь интернет или включи VPN.':e.message)}
+function show(l){$('#login').hidden=l;$('#app').hidden=!l;$('#bar').hidden=!l;$('#logout').hidden=!l}
+function num(v){var x=parseFloat(String(v).replace(',','.'));return isFinite(x)&&x>=0?Math.round(x*100)/100:null}
+function auto(fp){return Math.round(fp*K*100)/100}
+function dec(j){return JSON.parse(decodeURIComponent(escape(atob(j.content.replace(/\s/g,'')))))}
+function enc(o){return btoa(unescape(encodeURIComponent(JSON.stringify(o,null,1))))}
+
+function render(){
+  var box=$('#list');box.textContent='';var g='';
+  ITEMS.forEach(function(it){
+    if(it.g!==g){g=it.g;var h=document.createElement('div');h.className='grp';h.textContent=g;h.dataset.g=g;box.appendChild(h)}
+    var r=document.createElement('div');r.className='row';r.dataset.id=it.id;r.dataset.n=it.name.toLowerCase();
+    r.innerHTML='<div class="nm"></div><div class="ctl">'+(it.mm2?'<div class="qty"><button type="button" data-d="-1" aria-label="Минус">−</button><input class="sv" type="number" inputmode="numeric" min="0" max="999"><button type="button" data-d="1" aria-label="Плюс">+</button></div>':'')+
+      '<label class="pf"><span>FunPay, ₽</span><input class="fv" type="text" inputmode="decimal"><small class="fs"></small></label>'+
+      '<label class="pf"><span>Telegram, ₽</span><input class="tv" type="text" inputmode="decimal"><small class="ts"></small></label></div>';
+    r.querySelector('.nm').textContent=it.name;
+    box.appendChild(r);
+  });
+  refresh(true);
+}
+function changed(it){var o=orig[it.id],c=cur[it.id];return o.s!==c.s||o.fp!==c.fp||o.tg!==c.tg}
+function refresh(full){
+  var sum=0,n=0,q=($('#find').value||'').trim().toLowerCase(),vis={};
+  ITEMS.forEach(function(it){
+    var c=cur[it.id];if(it.mm2)sum+=c.s;var ch=changed(it);if(ch)n++;
+    var r=document.querySelector('.row[data-id="'+it.id+'"]');if(!r)return;
+    r.classList.toggle('ch',ch);
+    r.hidden=!!q&&r.dataset.n.indexOf(q)<0;if(!r.hidden)vis[it.g]=1;
+    var a=document.activeElement;
+    var sv=r.querySelector('.sv');if(sv&&a!==sv)sv.value=c.s;
+    var fv=r.querySelector('.fv');if(a!==fv)fv.value=c.fp;
+    var tv=r.querySelector('.tv');if(a!==tv)tv.value=c.tg===''?'':c.tg;
+    tv.placeholder='авто '+auto(c.fp);
+    var ts=r.querySelector('.ts'),eff=c.tg===''?auto(c.fp):c.tg,p=Math.round((1-eff/c.fp)*100);
+    ts.textContent=(c.tg===''?'авто · ':'')+(c.fp>0?(p>0?'−'+p+'%':(p<0?'+'+(-p)+'%':'')):'');ts.className='ts'+(p<0?' up':'');
+    var fs=r.querySelector('.fs');fs.textContent=c.fp!==it.fp?'на сайте было '+it.fp:'';
+  });
+  [].forEach.call(document.querySelectorAll('.grp'),function(h){h.hidden=!!q&&!vis[h.dataset.g]});
+  var pch=(pc.on!==po.on)||(pc.note!==po.note)||(pc.end!==po.end);if(pch)n++;
+  $('#promoBox').classList.toggle('ch2',pch);
+  $('#promoOn').setAttribute('aria-checked',pc.on);
+  $('#promoState').textContent=pc.on?'Баннер на сайте включён':'Баннер на сайте выключен';
+  var pn=$('#promoNote');if(document.activeElement!==pn)pn.value=pc.note;
+  var pe=$('#promoEnd');if(document.activeElement!==pe)pe.value=pc.end;
+  $('#sum').textContent=sum;$('#chg').textContent=n?('Изменено: '+n):'';$('#save').disabled=!n;
+}
+$('#promoOn').addEventListener('click',function(){pc.on=!pc.on;refresh();msg('')});
+$('#promoNote').addEventListener('input',function(){pc.note=this.value;refresh();msg('')});
+$('#promoEnd').addEventListener('input',function(){pc.end=this.value||DEF_END;refresh();msg('')});
+$('#find').addEventListener('input',function(){refresh()});
+$('#allAuto').addEventListener('click',function(){ITEMS.forEach(function(it){cur[it.id].tg=''});refresh();msg('')});
+$('#list').addEventListener('click',function(e){
+  var b=e.target.closest('button[data-d]');if(!b)return;
+  var id=b.closest('.row').dataset.id;cur[id].s=Math.max(0,Math.min(999,cur[id].s+(+b.dataset.d)));refresh();msg('');
+});
+$('#list').addEventListener('input',function(e){
+  var i=e.target,r=i.closest('.row');if(!r)return;var c=cur[r.dataset.id],it=ITEMS.filter(function(x){return x.id===r.dataset.id})[0];
+  if(i.classList.contains('sv')){var v=parseInt(i.value,10);c.s=(isNaN(v)||v<0)?0:Math.min(v,999)}
+  else if(i.classList.contains('fv')){var f=num(i.value);if(f!==null&&f>0)c.fp=f}
+  else if(i.classList.contains('tv')){c.tg=i.value.trim()===''?'':(num(i.value)||'')}
+  refresh();
+});
+$('#list').addEventListener('focusout',function(){refresh()});
+
+function get(f){
+  return api(f.path,'GET').then(function(r){
+    if(r.status===404&&f===files.prices){f.sha=null;f.data={};return null}
+    if(r.status===401||r.status===403)throw new Error('Токен не подходит. Проверь права (Contents: Read and write) и что выбран репозиторий danyamm2-shop.');
+    if(r.status===404)throw new Error('Файл '+f.path+' не найден в репозитории. Загрузи его в корень, рядом с index.html.');
+    if(!r.ok)throw new Error('Ошибка GitHub: '+r.status);
+    return r.json();
+  }).then(function(j){if(j){f.sha=j.sha;f.data=dec(j)}});
+}
+function load(){
+  msg('Загружаю…');
+  return Promise.all([get(files.stock),get(files.prices)]).then(function(){
+    var st=files.stock.data.stock||{},pr=files.prices.data.prices||{};orig={};cur={};
+    ITEMS.forEach(function(it){
+      var p=pr[it.id]||{},fp=(+p.fp>0)?+p.fp:it.fp,tg=(+p.tg>0)?+p.tg:'';
+      var s=it.mm2?(typeof st[it.id]==='number'?st[it.id]:it.stock):0;
+      orig[it.id]={s:s,fp:fp,tg:tg};cur[it.id]={s:s,fp:fp,tg:tg};
+    });
+    var p=files.stock.data.promo||{};
+    po={on:p.on!==false,note:(typeof p.note==='string'&&p.note.trim())?p.note:DEF_NOTE,end:(typeof p.end==='string'&&/^\d{4}-\d\d-\d\dT\d\d:\d\d/.test(p.end))?p.end.slice(0,16):DEF_END};
+    pc={on:po.on,note:po.note,end:po.end};
+    render();show(true);msg('');
+  });
+}
+if(token){load().catch(function(e){show(false);msg('');fail(e)})}
+$('#enter').addEventListener('click',function(){
+  var t=$('#tok').value.trim();if(!t)return;token=t;
+  load().then(function(){try{localStorage.setItem('gh_token',token)}catch(e){}$('#tok').value=''}).catch(function(e){token='';show(false);msg('');fail(e)});
+});
+$('#logout').addEventListener('click',function(){try{localStorage.removeItem('gh_token')}catch(e){}token='';show(false)});
+
+function put(f,obj,note){
+  var body={message:note,content:enc(obj)};if(f.sha)body.sha=f.sha;
+  return api(f.path,'PUT',body).then(function(r){
+    if(r.status===409||r.status===422)throw new Error('Данные на GitHub изменились. Страница обновится, повтори изменения.');
+    if(!r.ok)throw new Error('Ошибка сохранения '+f.path+': '+r.status);
+    return r.json();
+  }).then(function(j){f.sha=j.content.sha;f.data=obj});
+}
+$('#save').addEventListener('click',function(){
+  var d=new Date(),p2=function(n){return String(n).padStart(2,'0')};
+  var stamp=d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())+' '+p2(d.getHours())+':'+p2(d.getMinutes());
+  pc.note=pc.note.trim()||DEF_NOTE;
+  var stockCh=(pc.on!==po.on)||(pc.note!==po.note)||(pc.end!==po.end),priceCh=false;
+  var st=Object.assign({},files.stock.data.stock||{}),pr={};
+  ITEMS.forEach(function(it){
+    var c=cur[it.id],o=orig[it.id];
+    if(it.mm2){st[it.id]=c.s;if(c.s!==o.s)stockCh=true}
+    if(c.fp!==o.fp||c.tg!==o.tg)priceCh=true;
+    var e={};if(c.fp!==it.fp)e.fp=c.fp;if(c.tg!==''&&c.tg>0)e.tg=c.tg;
+    if(e.fp!==undefined||e.tg!==undefined)pr[it.id]=e;
+  });
+  $('#save').disabled=true;msg('Сохраняю…');
+  var chain=Promise.resolve();
+  if(stockCh){
+    var sd=Object.assign({},files.stock.data,{updated:stamp,stock:st,promo:Object.assign({},files.stock.data.promo||{},{on:pc.on,note:pc.note,end:pc.end+':00+03:00'})});
+    chain=chain.then(function(){return put(files.stock,sd,'Обновление наличия '+stamp)});
+  }
+  if(priceCh){
+    chain=chain.then(function(){return put(files.prices,{updated:stamp,prices:pr},'Обновление цен '+stamp)});
+  }
+  chain.then(function(){
+    ITEMS.forEach(function(it){orig[it.id]={s:cur[it.id].s,fp:cur[it.id].fp,tg:cur[it.id].tg}});
+    po={on:pc.on,note:pc.note,end:pc.end};refresh();
+    msg('Сохранено ✓ Сайт обновится в течение минуты','ok');
+  }).catch(function(e){
+    msg(e.message==='Failed to fetch'?'Нет связи с GitHub':e.message,'err');
+    if(/изменились/.test(e.message))load();else $('#save').disabled=false;
+  });
+});
+})();
+</script>
+</body>
+</html>
