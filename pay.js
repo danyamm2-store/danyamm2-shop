@@ -3,7 +3,7 @@
   'use strict';
 
   // ВАЖНО: после создания воркера вставь сюда его адрес (без / в конце).
-  var API = 'https://YOUR-WORKER.workers.dev';
+  var API = 'https://danyamm2-pay.zotovd695.workers.dev';
 
   var css =
     '.pay-back{position:fixed;inset:0;z-index:90;background:rgba(0,0,0,.55);display:grid;place-items:center;padding:14px;overflow-y:auto}' +
